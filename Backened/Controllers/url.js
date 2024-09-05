@@ -29,13 +29,45 @@ async function handlePostURL(req,res){
         })
         await newUrl.save()
         res.status(201).json({message : "URL is added to DB" , userShortId : short_id})
-        
+
     }catch (error) {
         console.error('Error saving URL:', error);
         res.status(500).json({ error: "Error saving URL to database" });
     }
 }
 
+
+async function handleGetShortId(req,res){
+  const {shortId} = req.params;
+
+  try{
+     const originalUrl = await urlModel.findOneAndUpdate(
+        { short_URL : shortId} , 
+        { $inc : { totalClicks : 1}, 
+           $push : {
+            visits : {
+                city : req.userCity || "unknown" ,
+                device : req.deviceInfo.name || "unknown",
+                timestamp : Date.now()
+            }
+        }},
+        {new : true}
+    )
+
+    if(originalUrl){
+         res.redirect(originalUrl.original_URL)
+    }else{
+        res.status(404).json({ error: "URL not found" });
+    }
+  }catch(error){
+    console.log('Error processing redirect:', error);
+    res.status(500).json({ error: "Error processing redirect" });
+  }
+   
+
+}
+
 module.exports = {
-    handlePostURL
+    handlePostURL,
+    handleGetShortId
 }
