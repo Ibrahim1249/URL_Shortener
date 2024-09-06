@@ -36,7 +36,6 @@ async function handlePostURL(req,res){
     }
 }
 
-
 async function handleGetShortId(req,res){
   const {shortId} = req.params;
 
@@ -67,7 +66,26 @@ async function handleGetShortId(req,res){
 
 }
 
+async function handleSingleUrlAnalytic(req,res) {
+     try{
+        const {shortId} = req.params;
+        const result = await urlModel.findOne({short_URL : shortId});
+        if (!result) {
+            return res.status(404).json({ error: "URL not found" });
+        }
+        const urlHistory = result.visits.map(visit => ({
+            city: visit.city,
+            device: visit.device
+        }));
+        res.status(200).json({totalClicks : result.totalClicks , urlHistory})
+     }catch(error){
+        console.log('Error processing single url analytic:', error);
+        res.status(500).json({error : "Error processing single url analytic"})
+     }
+}
+
 module.exports = {
     handlePostURL,
-    handleGetShortId
+    handleGetShortId,
+    handleSingleUrlAnalytic
 }

@@ -3,7 +3,7 @@ const axios = require("axios")
 async function fetchUserCity(req, res, next){
     let  userIp = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
        // Check if it's a localhost address
-       if (userIp === '::1' || userIp === '127.0.0.1' || userIp.includes('::ffff:127.0.0.1')) {
+       if (userIp === '::1' || userIp === '127.0.0.1') {
         // Use a fallback IP for testing (this is a public IP, you can replace it with any known public IP)
         userIp = '4.161.50.143';
     }
