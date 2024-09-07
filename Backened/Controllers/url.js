@@ -28,7 +28,7 @@ async function handlePostURL(req,res){
             }]
         })
         await newUrl.save()
-        res.status(201).json({message : "URL is added to DB" , userShortIdUrl : `http://localhost:6969/url/${short_id}` , userShortId : short_id})
+        res.status(201).json({message : "URL is added to DB" , userShortIdUrl : `http://${req.get("host")}/url/${short_id}` , userShortId : short_id})
 
     }catch (error) {
         console.error('Error saving URL:', error);
@@ -69,15 +69,15 @@ async function handleGetShortId(req,res){
 async function handleSingleUrlAnalytic(req,res) {
      try{
         const {shortId} = req.params;
-        const result = await urlModel.findOne({short_URL : shortId});
+        const result = await urlModel.findOne({short_URL : shortId}).select("-_id visits.city visits.device");
         if (!result) {
             return res.status(404).json({ error: "URL not found" });
         }
-        const urlHistory = result.visits.map(visit => ({
-            city: visit.city,
-            device: visit.device
-        }));
-        res.status(200).json({totalClicks : result.totalClicks , urlHistory})
+        // const urlHistory = result.visits.map(visit => ({
+        //     city: visit.city,
+        //     device: visit.device
+        // }));
+        res.status(200).json({totalClicks : result.totalClicks , result})
      }catch(error){
         console.log('Error processing single url analytic:', error);
         res.status(500).json({error : "Error processing single url analytic"})
