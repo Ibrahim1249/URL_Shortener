@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 function LandingPage() {
   const {
@@ -16,34 +18,75 @@ function LandingPage() {
     formState: { errors },
   } = useForm();
 
-  function handleUrl(data){
-    console.log(data)
+  const [redirectUrl, setRedirectUrl] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  async function handleUrl(data) {
+    try {
+      setIsLoading(true);
+      const response = await axios.post("http://localhost:6969/url", {
+        url: data.original_URL,
+      });
+      setIsLoading(false);
+      setRedirectUrl(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
   }
+
+
 
   return (
     <>
-      <div className="w-[80%] mx-auto">
+      <div className="xl:w-[80%] lg:w-[100%] md:px-12 px-8 mx-auto">
         <h2 className="my-10 sm:my-16 text-3xl sm:text-6xl lg:text-7xl text-red-950 text-center font-extrabold">
           The only URL Shortener <br /> you&rsquo;ll ever need! 👇
         </h2>
 
-        <form className="w-[40%] mx-auto flex items-center justify-center gap-4 mb-24" onSubmit={handleSubmit(handleUrl)}>
+        <form
+          className="xl:w-[40%] lg:w-[80%]  mx-auto flex items-center justify-center gap-4 mb-8 relative"
+          onSubmit={handleSubmit(handleUrl)}
+        >
           <Input
             className="border-2 border-red-900"
             placeholder="enter your url to short"
-            {...register("url", {
+            {...register("original_URL", {
               required: "url is required",
               pattern: {
-                value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                value:
+                  /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
                 message: "Invalid URL address",
               },
             })}
           />
-            {errors.url && <p className="text-red-500">{errors.url.message}</p>}
           <Button type="submit">Get Url</Button>
+          {errors.url && (
+            <p className="text-red-500 absolute top-10 text-center">
+              {errors.url.message}
+            </p>
+          )}
         </form>
 
-        <div className="w-[60%] mx-auto ">
+        {isLoading && (
+          <div className="flex justify-center">
+            <Loader2 className="animate-spin text-blue-500" size={48} />
+          </div>
+        )}
+
+        {!isLoading && redirectUrl && (
+          <div className="w-full md:w-[80%] lg:w-[60%] mx-auto flex flex-col md:flex-row items-center justify-center space-y-2 md:space-y-0 md:space-x-4">
+            <p className="font-bold text-red-900 text-xl">Shortened URL:</p>
+            <a
+              href={redirectUrl.userShortIdUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 text-xl cursor-pointer hover:underline"
+            >
+              {redirectUrl.userShortId}
+            </a>
+          </div>
+        )}
+
+        <div className="xl:w-[60%] lg:w-[90%]  mx-auto mt-20">
           <Accordion type="single" collapsible className="text-red-900 ">
             <AccordionItem value="item-1" className="border-b-2 border-red-900">
               <AccordionTrigger className="text-xl">

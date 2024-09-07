@@ -13,7 +13,7 @@ async function handlePostURL(req,res){
         const existingUrl = await urlModel.findOne({original_URL : req.body.url})
 
         if(existingUrl){
-            return res.status(200).json({message : "URL is Already existed" , userShortId : existingUrl.short_URL})
+            return res.status(200).json({message : "URL is Already existed" , userShortId : existingUrl.short_URL , userShortIdUrl : `http://localhost:6969/url/${existingUrl.short_URL}`})
         }
 
         // here i am creating new URL for user
@@ -28,7 +28,7 @@ async function handlePostURL(req,res){
             }]
         })
         await newUrl.save()
-        res.status(201).json({message : "URL is added to DB" , userShortId : short_id})
+        res.status(201).json({message : "URL is added to DB" , userShortIdUrl : `http://localhost:6969/url/${short_id}` , userShortId : short_id})
 
     }catch (error) {
         console.error('Error saving URL:', error);
