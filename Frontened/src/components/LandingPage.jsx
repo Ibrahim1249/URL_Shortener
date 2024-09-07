@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { useForm } from "react-hook-form";
 import {
   Accordion,
   AccordionContent,
@@ -9,7 +10,15 @@ import {
 } from "@/components/ui/accordion";
 
 function LandingPage() {
-    const [originalUrl , setOriginalUrl ] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  function handleUrl(data){
+    console.log(data)
+  }
 
   return (
     <>
@@ -18,41 +27,48 @@ function LandingPage() {
           The only URL Shortener <br /> you&rsquo;ll ever need! 👇
         </h2>
 
-        <form className="w-[40%] mx-auto flex items-center justify-center gap-4 mb-24">
-          <Input className="border-2 border-red-900" placeholder="enter your url to short" required/>
+        <form className="w-[40%] mx-auto flex items-center justify-center gap-4 mb-24" onSubmit={handleSubmit(handleUrl)}>
+          <Input
+            className="border-2 border-red-900"
+            placeholder="enter your url to short"
+            {...register("url", {
+              required: "url is required",
+              pattern: {
+                value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                message: "Invalid URL address",
+              },
+            })}
+          />
+            {errors.url && <p className="text-red-500">{errors.url.message}</p>}
           <Button type="submit">Get Url</Button>
         </form>
 
         <div className="w-[60%] mx-auto ">
-          <Accordion
-            type="single"
-            collapsible
-            className="text-red-900 "
-          >
+          <Accordion type="single" collapsible className="text-red-900 ">
             <AccordionItem value="item-1" className="border-b-2 border-red-900">
-              <AccordionTrigger>
+              <AccordionTrigger className="text-xl">
                 How does the Trimrr URL shortener works?
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="text-[17px]">
                 When you enter a long URL, our system generates a shorter
                 version of that URL. This shortened URL redirects to the
                 original long URL when accessed.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2" className="border-b-2 border-red-900">
-              <AccordionTrigger>
+              <AccordionTrigger className="text-xl">
                 Do I need an account to use the app?
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="text-[17px]">
                 Yes. Creating an account allows you to manage your URLs, view
                 analytics, and customize your short URLs.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3" className="border-b-2 border-red-900">
-              <AccordionTrigger>
+              <AccordionTrigger className="text-xl">
                 What analytics are available for my shortened URLs?
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="text-[17px]">
                 You can view the number of clicks, geolocation data of the
                 clicks and device types (mobile/desktop) for each of your
                 shortened URLs.
