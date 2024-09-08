@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import axios from "axios";
-import { Loader2 } from "lucide-react";
+import { ClipboardCopy, Loader2 } from "lucide-react";
 
 function LandingPage() {
   const {
@@ -79,10 +79,12 @@ function LandingPage() {
               href={redirectUrl.userShortIdUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 text-xl cursor-pointer hover:underline"
+              className="text-blue-500 text-xl cursor-pointer hover:underline "
             >
               {redirectUrl.userShortId}
             </a>
+              <Button onClick={()=> navigator.clipboard.writeText(redirectUrl.userShortIdUrl)} className="bg-white text-black p-2 border hover:bg-slate-100 "><ClipboardCopy/></Button>
+
           </div>
         )}
 

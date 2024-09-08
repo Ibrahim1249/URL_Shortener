@@ -8,8 +8,10 @@ import {
   import { Input } from "./ui/input";
   import { Button } from "./ui/button";
   import { Link } from "react-router-dom";
+  import { useForm } from "react-hook-form";
   
   function Login() {
+
     const {
         register,
         handleSubmit,
@@ -17,7 +19,7 @@ import {
       } = useForm();
     return (
       <>
-        <div className="flex items-center justify-center flex-col py-[10%] w-[350px] mx-auto">
+        <div className="flex items-center justify-center flex-col py-[8%] w-[350px] mx-auto">
           <Card className="w-full bg-slate-50 border-2">
             <CardHeader>
               <CardTitle className="text-center text-xl font-medium">Login </CardTitle>
