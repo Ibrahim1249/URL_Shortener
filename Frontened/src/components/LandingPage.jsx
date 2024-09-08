@@ -81,7 +81,7 @@ function LandingPage() {
               rel="noopener noreferrer"
               className="text-blue-500 text-xl cursor-pointer hover:underline "
             >
-              {redirectUrl.userShortId}
+              {redirectUrl.userShortIdUrl}
             </a>
               <Button onClick={()=> navigator.clipboard.writeText(redirectUrl.userShortIdUrl)} className="bg-white text-black p-2 border hover:bg-slate-100 "><ClipboardCopy/></Button>
 
