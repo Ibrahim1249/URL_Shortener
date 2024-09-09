@@ -3,6 +3,8 @@ const urlRouter = require("./Routers/urlRouter");
 const { default: mongoose } = require("mongoose");
 const cors = require("cors")
 const dotenv = require("dotenv");
+const registerRouter = require("./Routers/registerRouter");
+const loginRouter = require("./Routers/loginRouter");
 dotenv.config()
 const app = express();
 
@@ -23,4 +25,6 @@ mongoose.connect(process.env.MONGODB_URL).then(()=>{
 
 // router
 app.use("/url",urlRouter);
+app.use("/register" , registerRouter)
+app.use("/login" , loginRouter)
 
