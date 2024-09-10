@@ -7,7 +7,7 @@ import {
   } from "@/components/ui/card";
   import { Input } from "./ui/input";
   import { Button } from "./ui/button";
-  import { Link } from "react-router-dom";
+  import { Link, useNavigate } from "react-router-dom";
   import { useForm } from "react-hook-form";
   import axios from "axios";
   function Login() {
@@ -17,11 +17,17 @@ import {
         handleSubmit,
         formState: { errors },
       } = useForm();
+      const navigate = useNavigate()
+
 
       const handleLoginUser = async(data)=>{
         try{
           const response = await axios.post("http://localhost:6969/login" , data)
-          console.log(response.data)
+         if(response.status === 200){
+           navigate("/" , {state: {user : response.data.userData}})
+         }else {
+          console.log("Login failed:", response.data.message);
+        }
        }catch(error){
          console.log(error)
        }

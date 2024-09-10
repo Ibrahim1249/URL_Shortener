@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import { ClipboardCopy, Loader2 } from "lucide-react";
 
+
 function LandingPage() {
   const {
     register,
@@ -20,6 +21,7 @@ function LandingPage() {
 
   const [redirectUrl, setRedirectUrl] = useState();
   const [isLoading, setIsLoading] = useState(false);
+
   async function handleUrl(data) {
     try {
       setIsLoading(true);
@@ -32,9 +34,6 @@ function LandingPage() {
       console.log(error.message);
     }
   }
-
-
-
   return (
     <>
       <div className="xl:w-[80%] lg:w-[100%] md:px-12 px-8 mx-auto">
