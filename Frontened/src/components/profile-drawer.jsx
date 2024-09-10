@@ -24,8 +24,6 @@ const initialUserData = {
   username: "johndoe",
   avatarUrl: "/placeholder.svg?height=100&width=100",
   email: "johndoe@example.com",
-  fullName: "John Doe",
-  joinDate: "January 1, 2023",
 }
 
 export function ProfileDrawer({user , setUser}) {

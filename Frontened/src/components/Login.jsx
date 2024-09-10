@@ -10,6 +10,8 @@ import {
   import { Link, useNavigate } from "react-router-dom";
   import { useForm } from "react-hook-form";
   import axios from "axios";
+  import { useState } from "react";
+  import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
   function Login() {
 
     const {
@@ -18,6 +20,7 @@ import {
         formState: { errors },
       } = useForm();
       const navigate = useNavigate()
+      const [isOpen , setIsOpen ] = useState(false)
 
 
       const handleLoginUser = async(data)=>{
@@ -54,6 +57,7 @@ import {
                   },
                 })}
               />
+      
               {errors.email && (
                 <p className="text-red-500 mt-2">
                   {errors.email.type === "pattern"
@@ -64,13 +68,14 @@ import {
             </CardContent>
             <CardContent>
               <label> Password </label>
+              <div className="relative">
               <Input
                 id="password"
                 className={`border ${
                   errors.password ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter your password"
-                type="password"
+                type={isOpen ? "type" : "password"}
                 {...register("password", {
                   required: "Password is required",
                   minLength: {
@@ -90,6 +95,11 @@ import {
                   },
                 })}
               />
+               <span onClick={()=>{setIsOpen(!isOpen)}} className="absolute top-1 right-1 p-2 cursor-pointer">{isOpen ? <EyeOpenIcon /> : <EyeClosedIcon/>}</span>
+                </div>
+               {errors.password && (
+                <p className="text-red-500 mt-2">{errors.password.message}</p>
+              )}
             </CardContent>
             <CardFooter>
               <Button type="submit" className="w-full">Login</Button>

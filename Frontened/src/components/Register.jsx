@@ -7,9 +7,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 function Register() {
   const {
@@ -17,11 +19,20 @@ function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate()
+  const [isOpen , setIsOpen ] = useState(false)
 
   const handleRegister = async(data)=>{
      try{
         const response = await axios.post("http://localhost:6969/register" , data)
         console.log(response.data)
+        if(response.status === 201){
+           alert(response.data.message);
+          navigate("/login")
+        }else{
+          alert( "Login failed:", response.data.message);
+          return;
+        }
      }catch(error){
        console.log(error)
      }
@@ -80,13 +91,14 @@ function Register() {
             </CardContent>
             <CardContent>
               <label> Password </label>
+              <div className="relative ">
               <Input
                 id="password"
                 className={`border ${
                   errors.password ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter your password"
-                type="password"
+                type={isOpen ? "text" : "password"}
                 {...register("password", {
                   required: "Password is required",
                   minLength: {
@@ -106,6 +118,8 @@ function Register() {
                   },
                 })}
               />
+               <span onClick={()=>{setIsOpen(!isOpen)}} className="absolute top-1 right-1 p-2 cursor-pointer">{isOpen ? <EyeOpenIcon /> : <EyeClosedIcon/>}</span>
+               </div>
               {errors.password && (
                 <p className="text-red-500 mt-2">{errors.password.message}</p>
               )}
