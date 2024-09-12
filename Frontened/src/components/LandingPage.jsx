@@ -25,7 +25,7 @@ function LandingPage() {
   async function handleUrl(data) {
     try {
       setIsLoading(true);
-      const response = await axios.post("http://localhost:6969/url", {
+      const response = await axios.post("https://url-shortener-p49t.onrender.com/url", {
         url: data.original_URL,
       });
       setIsLoading(false);
