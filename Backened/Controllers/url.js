@@ -13,7 +13,7 @@ async function handlePostURL(req,res){
         const existingUrl = await urlModel.findOne({original_URL : req.body.url})
 
         if(existingUrl){
-            return res.status(200).json({message : "URL is Already existed" , userShortId : existingUrl.short_URL , userShortIdUrl : `http://localhost:6969/url/${existingUrl.short_URL}`})
+            return res.status(200).json({message : "URL is Already existed" , userShortId : existingUrl.short_URL , userShortIdUrl : `https://url-shortener-p49t.onrender.com/url/${existingUrl.short_URL}`})
         }
 
         // here i am creating new URL for user
